@@ -1,0 +1,29 @@
+@using cvGenerator.Shared
+
+<EditForm Model="@cvModel" OnValidSubmit="HandleValidSubmit" FormName="cvForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label for="name">Nom :</label>
+        <InputText id="name" @bind-Value="cvModel.Name" />
+    </div>
+    <div>
+        <label for="experience">Expérience :</label>
+        <InputText id="experience" @bind-Value="cvModel.Experience" />
+    </div>
+    <div>
+        <label for="skills">Compétences :</label>
+        <InputText id="skills" @bind-Value="cvModel.Skills" />
+    </div>
+    <button type="submit">Soumettre</button>
+</EditForm>
+
+@code {
+    private CVModel cvModel = new CVModel();
+
+    private void HandleValidSubmit()
+    {
+        // Logique pour gérer la soumission du formulaire
+        Console.WriteLine("Formulaire soumis avec succès !");
+    }
+}
