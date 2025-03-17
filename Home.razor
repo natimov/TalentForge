@@ -1,0 +1,130 @@
+@page "/"
+@using cvGenerator.Shared
+
+<PageTitle>Accueil</PageTitle>
+
+<h3>Générateur de CV</h3>
+
+<EditForm Model="@cvSelection" OnValidSubmit="GenerateCV" FormName="cvForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label for="client">Client :</label>
+        <InputSelect id="client" @bind-Value="cvSelection.Client">
+            <option value="">Sélectionner un client</option>
+            <option value="Pierre & Vacances">Pierre & Vacances</option>
+            <option value="TotalEnergies">TotalEnergies</option>
+            <option value="ClubMed">ClubMed</option>
+            <option value="Groupe ADP">Groupe ADP</option>
+            <option value="Vinci environnement">Vinci environnement</option>
+            <option value="Vinci Construction">Vinci Construction</option>
+            <option value="Suez">Suez</option>
+            <option value="Saint-Gobain">Saint-Gobain</option>
+            <option value="Renault">Renault</option>
+            <option value="Expléo">Expléo</option>
+            <option value="Korian">Korian</option>
+            <option value="Groupe BPCE">Groupe BPCE</option>
+            <option value="Natixis">Natixis</option>
+            <option value="Caisse d'Epargne">Caisse d'Epargne</option>
+            <option value="Engie">Engie</option>
+            <option value="Alstom">Alstom</option>
+            <option value="Crédit Agricole">Crédit Agricole</option>
+            <option value="Le Groupe La poste">Le Groupe La poste</option>
+            <option value="RATP DEV">RATP DEV</option>
+            <option value="BIOMERIEUX">BIOMERIEUX</option>
+            <option value="Kiabi">Kiabi</option>
+            <option value="hagerGroup">hagerGroup</option>
+            <option value="l'Oréal">l'Oréal</option>
+            <option value="Edenred">Edenred</option>
+            <option value="Ipsen">Ipsen</option>
+            <option value="GRTgaz">GRTgaz</option>
+            <option value="Delachaux">Delachaux</option>
+            <option value="Dexia">Dexia</option>
+            <option value="Le Conservateur">Le Conservateur</option>
+            <option value="Exail">Exail</option>
+            <option value="Safran">Safran</option>
+            <option value="Groupe Savencia">Groupe Savencia</option>
+        </InputSelect>
+    </div>
+    <div>
+        <label for="activity">Activité :</label>
+        <InputSelect id="activity" @bind-Value="cvSelection.Activity">
+            <option value="">Sélectionner une activité</option>
+            <option value="Développeur">Développeur</option>
+            <option value="Data Analyst">Data Analyst</option>
+            <option value="Pentester">Pentester</option>
+            <option value="Architecte">Architecte</option>
+        </InputSelect>
+    </div>
+    <div>
+        <label for="location">Lieu :</label>
+        <InputSelect id="location" @bind-Value="cvSelection.Location">
+            <option value="">Sélectionner un lieu</option>
+            <option value="Paris">Paris</option>
+            <option value="Lyon">Lyon</option>
+            <option value="Marseille">Marseille</option>
+        </InputSelect>
+    </div>
+    <div>
+        <label for="startDate">Début de mission :</label>
+        <InputDate id="startDate" @bind-Value="cvSelection.StartDate" />
+    </div>
+    <div>
+        <label for="endDate">Fin de mission :</label>
+        <InputDate id="endDate" @bind-Value="cvSelection.EndDate" />
+    </div>
+    <button type="submit">Générer le CV</button>
+</EditForm>
+
+@if (generatedCV != null)
+{
+    <h4>Visualisation du CV</h4>
+    <div>
+        <p><strong>Client :</strong> @(string.IsNullOrEmpty(generatedCV?.Client) ? "Non renseigné" : generatedCV.Client)</p>
+        <p><strong>Activité :</strong> @(string.IsNullOrEmpty(generatedCV?.Activity) ? "Non renseigné" : generatedCV.Activity)</p>
+        <p><strong>Lieu :</strong> @(string.IsNullOrEmpty(generatedCV?.Location) ? "Non renseigné" : generatedCV.Location)</p>
+        <p><strong>Début de mission :</strong> @(generatedCV?.StartDate?.ToString("dd/MM/yyyy") ?? "Non renseigné")</p>
+        <p><strong>Fin de mission :</strong> @(generatedCV?.EndDate?.ToString("dd/MM/yyyy") ?? "Non renseigné")</p>
+    </div>
+}
+
+@code {
+    private CVSelectionModel cvSelection = new CVSelectionModel
+        {
+            Client = "Pierre & Vacances",  // Valeur par défaut
+            Activity = "Développeur",      // Valeur par défaut
+            Location = "Paris",           // Valeur par défaut
+            StartDate = DateTime.Now,     // Valeur par défaut
+            EndDate = DateTime.Now.AddMonths(6) // Valeur par défaut
+        };
+
+    private CVModel generatedCV;
+
+    private void GenerateCV()
+    {
+        // Logique pour générer le CV en fonction des sélections
+        Console.WriteLine($"Client: {cvSelection.Client}, Activité: {cvSelection.Activity}, Lieu: {cvSelection.Location}, " +
+                          $"Début de mission: {cvSelection.StartDate?.ToString("dd/MM/yyyy")}, Fin de mission: {cvSelection.EndDate?.ToString("dd/MM/yyyy")}");
+
+        generatedCV = new CVModel
+            {
+                Name = "Nom Exemple",
+                Experience = "Expérience Exemple",
+                Skills = "Compétences Exemple",
+                Client = cvSelection.Client,
+                Activity = cvSelection.Activity,
+                Location = cvSelection.Location,
+                StartDate = cvSelection.StartDate,
+                EndDate = cvSelection.EndDate
+            };
+    }
+
+    public class CVSelectionModel
+    {
+        public string Client { get; set; }
+        public string Activity { get; set; }
+        public string Location { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+    }
+}
